@@ -13,7 +13,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
     return {
         track: {
             ...track,
-            audioUrl: `/content/${track.audioFile}`,
+            audioUrl: `/content/track/${track.audioFile}`,
         },
         isAuthenticated: isAuthenticated,
     };

@@ -10,6 +10,7 @@ export const music = sqliteTable('music', {
 	hidden: integer('hidden', { mode: 'boolean' }).default(false).notNull(),
 	setup: text('setup'),
 	audioFile: text('audio_file').notNull(),
+	coverUrl: text('cover_url').notNull().default('/content/splash/default.png'),
 	duration: integer('duration').notNull().default(0),
 });
 
@@ -27,12 +28,6 @@ export const tags = sqliteTable('tags', {
 	id: integer('id').primaryKey(),
 	name: text('name').notNull().unique()
 });
-
-/* 
-	authors: text('authors', {mode: 'json'}).notNull().$type<string[]>().default(['Tachyon']),
-	styles: text('style', { mode: 'json' }).$type<string[]>(),
-	tags: text('tags', { mode: 'json' }).$type<string[]>(),
-	*/
 
 // Relational tables
 

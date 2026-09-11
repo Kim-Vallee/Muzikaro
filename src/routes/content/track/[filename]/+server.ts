@@ -18,11 +18,11 @@ export const GET = async ({ params, locals }) => {
     if (!filename) {
         throw error(400, 'Missing audio filename.');
     }
-    
+
     const track = await getTrackByFilename(filename, isAuthenticated);
 
     if (!track) {
-        throw error(404, 'Audio file not found.')
+        throw error(404, 'Audio file not found.');
     }
 
     const filePath = join(getAudioDir(), filename);

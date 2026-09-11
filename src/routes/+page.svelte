@@ -268,7 +268,7 @@
                     <!-- Card Header -->
                     <div class="h-32 relative overflow-hidden">
                         <div
-                            use:waveform={"/content/" + track.audioFile}
+                            use:waveform={"/content/track/" + track.audioFile}
                             class="absolute inset-0 opacity-50 group-hover:opacity-100 transition-opacity bg-black/20"
                         ></div>
                     </div>

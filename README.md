@@ -87,6 +87,7 @@ pnpm run dev
 | `CLIENT_ID_GITHUB` | Client ID of the GitHub app | Yes |
 | `CLIENT_SECRET_GITHUB` | Client secret of the Github app | Yes |
 | `AUDIO_DIR` | Absolute path to your audio files | Yes |
+| `COVERS_DIR` | Absolute path to your cover files | Yes |
 | `PRODUCTION_HOST` | The host IP in production | Production only |
 | `PRODUCTION_PORT` | The port to use in production | Production only |
 | `PRODUCTION_ORIGIN` | Your website URL, likely the same as `BETTER_AUTH_URL` | Production only |
