@@ -81,6 +81,7 @@ pnpm run dev
 
 | Variable | Description | Required |
 |---|---|---|
+| `DEBUG` | Whether to use debug mode. When set to yes, authentification does not go through GitHub and is fully local. | Yes |
 | `BETTER_AUTH_SECRET` | Secret used by Better Auth | Yes |
 | `BETTER_AUTH_URL` | Public URL of the application used for the GitHub app | Yes |
 | `DATABASE_URL` | URL of the database (e.g. `database.db`) | Yes |

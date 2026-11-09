@@ -5,6 +5,8 @@ declare global {
 		interface Locals {
 			session?: unknown;
 			user?: unknown;
+			debugMode?: boolean;
+			debugAuthenticated?: boolean;
 		}
 		// interface Error {}
 		// interface PageData {}

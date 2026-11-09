@@ -1,10 +1,36 @@
 <script lang="ts">
+    import type { PageProps } from "./$types";
     import { authClient } from "$lib/client";
+    let { data }: PageProps = $props();
     const session = authClient.useSession();
 </script>
 
 <div class="min-h-screen flex items-center justify-center p-8 bg-gray-950">
-    {#if $session.data}
+    {#if data.debugMode}
+        {#if data.debugAuthenticated}
+            <div class="w-full max-w-sm flex flex-col items-center gap-4 rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-lg">
+                <p class="m-0 font-semibold text-slate-900">Welcome, Debug User</p>
+                <form method="POST" action="?/debugLogout" class="w-full">
+                    <button
+                        class="inline-flex w-full items-center justify-center rounded-lg border border-slate-200 bg-slate-900 px-4 py-3 font-semibold text-white transition hover:bg-slate-800"
+                    >
+                        Sign Out
+                    </button>
+                </form>
+            </div>
+        {:else}
+            <div class="w-full max-w-sm flex flex-col items-center gap-4 rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-lg">
+                <p class="text-slate-600">Sign in to access the admin dashboard.</p>
+                <form method="POST" action="?/debugLogin" class="w-full">
+                    <button
+                        class="inline-flex w-full items-center justify-center gap-3 rounded-lg border border-slate-200 bg-slate-900 px-4 py-3 font-semibold text-white transition hover:bg-slate-800"
+                    >
+                        Log In
+                    </button>
+                </form>
+            </div>
+        {/if}
+    {:else if $session.data}
         <div class="w-full max-w-sm flex flex-col items-center gap-4 rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-lg">
             <p class="m-0 font-semibold text-slate-900">Welcome, {$session.data.user.name}</p>
             <button
