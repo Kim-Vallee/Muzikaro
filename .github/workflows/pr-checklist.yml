@@ -7,11 +7,13 @@ jobs:
     environment: Muzikaro
     env:
       AUDIO_DIR: ${{ vars.AUDIO_DIR }}
+      COVERS_DIR: ${{ vars.COVERS_DIR }}
       BETTER_AUTH_URL: ${{ secrets.BETTER_AUTH_URL }}
       BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
       CLIENT_ID_GITHUB: ${{ secrets.CLIENT_ID_GITHUB }}
       CLIENT_SECRET_GITHUB: ${{ secrets.CLIENT_SECRET_GITHUB }}
       DATABASE_URL: ${{ vars.DATABASE_URL }}
+      DEBUG: $${{ vars.DEBUG }}
     steps:
       - name: Checkout 
         uses: actions/checkout@v7
