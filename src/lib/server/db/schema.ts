@@ -10,7 +10,7 @@ export const music = sqliteTable('music', {
 	hidden: integer('hidden', { mode: 'boolean' }).default(false).notNull(),
 	setup: text('setup'),
 	audioFile: text('audio_file').notNull(),
-	coverUrl: text('cover_url').notNull().default('/content/splash/default.png'),
+	coverUrl: text('cover_url').notNull().default('default.jpg'),
 	duration: integer('duration').notNull().default(0),
 });
 
