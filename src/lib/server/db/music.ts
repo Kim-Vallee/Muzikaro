@@ -21,6 +21,7 @@ export type Track = {
     hidden: boolean;
     setup?: string | null;
     tags?: { id: number, name: string }[];
+    coverUrl: string;
     audioFile: string;
     duration: number;
 };
@@ -155,6 +156,12 @@ export const getAllAuthors = (
             )
         );
     }
+
+    return sql_query.all();
+}
+
+export const getAllCovers = () => {
+    let sql_query = db.selectDistinct({coverUrl: music.coverUrl }).from(music).orderBy(music.coverUrl);
 
     return sql_query.all();
 }
@@ -462,6 +469,7 @@ export const createTrack = async (input: {
     setup?: string | null;
     tags?: string[] | null;
     audioFile: string;
+    coverUrl: string;
     duration: number;
 }) => {
     const authorsToInsert = input.authors.filter(name => name.trim() !== '') ?? [];
@@ -476,6 +484,7 @@ export const createTrack = async (input: {
             bpm: input.bpm ?? null,
             setup: input.setup?.trim() || null,
             audioFile: input.audioFile.trim(),
+            coverUrl: input.coverUrl,
             duration: input.duration,
         }).returning({ id: music.id }).all();
 
