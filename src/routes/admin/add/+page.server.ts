@@ -140,7 +140,6 @@ export const actions: Actions = {
         let validatedCoverUrl = "";
 
         if (coverUrl.toLowerCase().trim() !== "new" && coverUrl.toLowerCase().trim() !== "default") {
-            console.log(coverUrl);
             // Check that the cover filename is not already in use
             const existingCoverURL = getAllCovers();
             if (existingCoverURL.filter((cover) => cover.coverUrl === coverUrl).length == 0) {

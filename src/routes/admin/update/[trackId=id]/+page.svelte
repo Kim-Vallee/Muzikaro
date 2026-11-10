@@ -5,6 +5,7 @@
 
     let { data, form }: { data: PageData; form?: ActionData } = $props();
     let selectedFileName = $state('');
+    let selectedSplashArtName = $state("");
 
     // Element references for Tagify
     let tagsInput: HTMLInputElement | undefined = $state(undefined);
@@ -15,11 +16,13 @@
     let allTags = $derived(data.allUniqueTags);
     let allStyles = $derived(data.allUniqueStyles);
     let allAuthors = $derived(data.allUniqueAuthors);
+    let allCovers = $derived(data.allUniqueCovers);
 
     const inputClasses =
         'w-full rounded-lg border border-gray-700 bg-gray-800/80 px-4 py-3 text-sm text-white placeholder:text-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30';
 
     const track = $derived(data.track);
+    let coverSelection = $derived(track.coverUrl === "default.jpg" ? "default" : track.coverUrl );
 
     onMount(() => {
         const instances: Array<{ destroy: () => void }> = [];
@@ -193,6 +196,113 @@
                                 <p class="mt-2 text-sm text-gray-400">Current file: {track.audioFile}</p>
                             {/if}
                         </label>
+                        
+                        
+                    <div
+                        class="block text-sm font-medium text-gray-300 md:col-span-2"
+                    >
+                        <label class="mb-2 block" for="coverSelection">
+                            Cover
+                        </label>
+                        <div class="relative">
+                            <select
+                                id="coverSelection"
+                                name="coverSelection"
+                                bind:value={coverSelection}
+                                onchange={() => {
+                                    selectedSplashArtName = "";
+                                }}
+                                class={inputClasses + " appearance-none"}
+                            >   
+                                <option value="default">Use default cover</option>
+                                {#each allCovers as track (track.coverUrl)}
+                                    <option value="{track.coverUrl}">{track.coverUrl}</option>
+                                {/each}
+                                <option value="new">Add a new cover</option>
+                            </select>
+                            
+                            <svg
+                                aria-hidden="true"
+                                class="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                            >
+                                <path
+                                    fill-rule="evenodd"
+                                    d="M5.22 7.47a.75.75 0 011.06 0L10 11.19l3.72-3.72a.75.75 0 111.06 1.06l-4.25 4.25a.75.75 0 01-1.06 0L5.22 8.53a.75.75 0 010-1.06z"
+                                    clip-rule="evenodd"
+                                />
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    {#if coverSelection !== "new"}
+                        <div
+                            class="md:col-span-2 overflow-hidden rounded-xl border border-gray-700 bg-gray-800/70"
+                        >
+                            <img
+                                src="/content/splash/{coverSelection === 'default'
+                                    ? 'default.jpg'
+                                    : coverSelection}"
+                                alt="Selected cover preview"
+                                class="max-h-80 w-full object-contain"
+                            />
+                        </div>
+                    {/if}
+
+                    {#if coverSelection === "new"}
+                        <label
+                            class="block text-sm font-medium text-gray-300 md:col-span-2"
+                            for="splashArt"
+                        >
+                            <span class="mb-2 block">Splash art</span>
+                            <div
+                                class="flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-600 bg-gray-800/70 px-6 py-8 text-center transition hover:border-blue-500 hover:bg-gray-800"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="h-10 w-10 text-gray-400"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                    stroke-width="1.5"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M4.5 16.5l4.5-4.5 3 3 4.5-6 3 4.5M4.5 19.5h15a1.5 1.5 0 001.5-1.5v-12a1.5 1.5 0 00-1.5-1.5h-15A1.5 1.5 0 003 6v12a1.5 1.5 0 001.5 1.5z"
+                                    />
+                                </svg>
+                                <span
+                                    class="mt-3 text-sm font-medium text-white"
+                                >
+                                    Drop your splash art here
+                                </span>
+                                <span class="mt-1 text-xs text-gray-400">
+                                    Image files
+                                </span>
+                                <input
+                                    name="splashArt"
+                                    id="splashArt"
+                                    type="file"
+                                    accept="image/*"
+                                    required
+                                    class="sr-only"
+                                    onchange={(event) => {
+                                        selectedSplashArtName =
+                                            event.currentTarget.files?.[0]
+                                                ?.name ?? "";
+                                    }}
+                                />
+                            </div>
+                            {#if selectedSplashArtName}
+                                <p class="mt-2 text-sm text-gray-400">
+                                    Selected: {selectedSplashArtName}
+                                </p>
+                            {/if}
+                        </label>
+                    {/if}
 
                         <!-- Tags field now uses Tagify -->
                         <div class="block text-sm font-medium text-gray-300 md:col-span-2">

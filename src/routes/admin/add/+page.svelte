@@ -292,6 +292,20 @@
                         </div>
                     </div>
 
+                    {#if coverSelection !== "new"}
+                        <div
+                            class="md:col-span-2 overflow-hidden rounded-xl border border-gray-700 bg-gray-800/70"
+                        >
+                            <img
+                                src="/content/splash/{coverSelection === 'default'
+                                    ? 'default.jpg'
+                                    : coverSelection}"
+                                alt="Selected cover preview"
+                                class="max-h-80 w-full object-contain"
+                            />
+                        </div>
+                    {/if}
+
                     {#if coverSelection === "new"}
                         <label
                             class="block text-sm font-medium text-gray-300 md:col-span-2"

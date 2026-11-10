@@ -161,7 +161,7 @@ export const getAllAuthors = (
 }
 
 export const getAllCovers = () => {
-    let sql_query = db.selectDistinct({coverUrl: music.coverUrl }).from(music).orderBy(music.coverUrl);
+    let sql_query = db.selectDistinct({ coverUrl: music.coverUrl }).from(music).orderBy(music.coverUrl);
 
     return sql_query.all();
 }
@@ -312,6 +312,7 @@ export const updateTrackById = async (id: number, input: {
     setup?: string | null;
     tags?: string[] | null;
     audioFile: string;
+    coverUrl: string;
     duration: number;
 }) => {
     const tagNames = input.tags?.filter(Boolean) ?? [];
@@ -320,12 +321,13 @@ export const updateTrackById = async (id: number, input: {
 
     // Decide which fields to update on the music record
     const musicUpdateData: Record<string, any> = {};
-    if (input.title !== undefined) musicUpdateData.title = input.title.trim();
-    if (input.description !== undefined) musicUpdateData.description = input.description?.trim() || null;
-    if (input.bpm !== undefined) musicUpdateData.bpm = input.bpm ?? null;
-    if (input.setup !== undefined) musicUpdateData.setup = input.setup?.trim() || null;
-    if (input.audioFile !== undefined) musicUpdateData.audioFile = input.audioFile.trim();
-    if (input.duration !== undefined) musicUpdateData.duration = input.duration;
+    musicUpdateData.title = input.title.trim();
+    musicUpdateData.description = input.description?.trim() || null;
+    musicUpdateData.bpm = input.bpm ?? null;
+    musicUpdateData.setup = input.setup?.trim() || null;
+    musicUpdateData.audioFile = input.audioFile.trim();
+    musicUpdateData.duration = input.duration;
+    musicUpdateData.coverUrl = input.coverUrl;
 
     return db.transaction(() => {
         // 1. Update the music record (only if there are changes)
@@ -337,77 +339,71 @@ export const updateTrackById = async (id: number, input: {
         }
 
         // 2. Replace authors (only if the field was provided)
-        if (input.authors !== undefined) {
-            // Delete all existing author links for this track
-            db.delete(musicAuthors).where(eq(musicAuthors.musicId, id)).run();
+        // Delete all existing author links for this track
+        db.delete(musicAuthors).where(eq(musicAuthors.musicId, id)).run();
 
-            // Insert new ones
-            for (const authorName of authorNames) {
-                const authorId = getOrCreateEntity(authors, authorName);
-                db.insert(musicAuthors).values({
-                    musicId: id,
-                    authorId,
-                }).onConflictDoNothing().run();
-            }
-
-            // Delete orphaned authors
-            db.delete(authors).where(
-                notExists(
-                    db.select({ one: sql`1` })
-                        .from(musicAuthors)
-                        .where(eq(musicAuthors.authorId, authors.id))
-                )
-            )
-                .run();
+        // Insert new ones
+        for (const authorName of authorNames) {
+            const authorId = getOrCreateEntity(authors, authorName);
+            db.insert(musicAuthors).values({
+                musicId: id,
+                authorId,
+            }).onConflictDoNothing().run();
         }
+
+        // Delete orphaned authors
+        db.delete(authors).where(
+            notExists(
+                db.select({ one: sql`1` })
+                    .from(musicAuthors)
+                    .where(eq(musicAuthors.authorId, authors.id))
+            )
+        )
+            .run();
 
         // 3. Replace styles
-        if (input.styles !== undefined) {
-            db.delete(musicStyles).where(eq(musicStyles.musicId, id)).run();
+        db.delete(musicStyles).where(eq(musicStyles.musicId, id)).run();
 
-            for (const styleName of styleNames) {
-                const styleId = getOrCreateEntity(styles, styleName);
-                db.insert(musicStyles).values({
-                    musicId: id,
-                    styleId,
-                }).onConflictDoNothing().run();
-            }
-
-            // Delete orphaned styles
-            db.delete(styles)
-                .where(
-                    notExists(
-                        db.select({ one: sql`1` })
-                            .from(musicStyles)
-                            .where(eq(musicStyles.styleId, styles.id))
-                    )
-                )
-                .run();
+        for (const styleName of styleNames) {
+            const styleId = getOrCreateEntity(styles, styleName);
+            db.insert(musicStyles).values({
+                musicId: id,
+                styleId,
+            }).onConflictDoNothing().run();
         }
+
+        // Delete orphaned styles
+        db.delete(styles)
+            .where(
+                notExists(
+                    db.select({ one: sql`1` })
+                        .from(musicStyles)
+                        .where(eq(musicStyles.styleId, styles.id))
+                )
+            )
+            .run();
 
         // 4. Replace tags
-        if (input.tags !== undefined) {
-            db.delete(musicTags).where(eq(musicTags.musicId, id)).run();
+        db.delete(musicTags).where(eq(musicTags.musicId, id)).run();
 
-            for (const tagName of tagNames) {
-                const tagId = getOrCreateEntity(tags, tagName);
-                db.insert(musicTags).values({
-                    musicId: id,
-                    tagId,
-                }).onConflictDoNothing().run();
-            }
-
-            // Delete orphaned tags
-            db.delete(tags)
-                .where(
-                    notExists(
-                        db.select({ one: sql`1` })
-                            .from(musicTags)
-                            .where(eq(musicTags.tagId, tags.id))
-                    )
-                )
-                .run();
+        for (const tagName of tagNames) {
+            const tagId = getOrCreateEntity(tags, tagName);
+            db.insert(musicTags).values({
+                musicId: id,
+                tagId,
+            }).onConflictDoNothing().run();
         }
+
+        // Delete orphaned tags
+        db.delete(tags)
+            .where(
+                notExists(
+                    db.select({ one: sql`1` })
+                        .from(musicTags)
+                        .where(eq(musicTags.tagId, tags.id))
+                )
+            )
+            .run();
 
         return id;
     });
