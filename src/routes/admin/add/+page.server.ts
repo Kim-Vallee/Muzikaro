@@ -17,7 +17,7 @@ export const load: PageServerLoad = async ({ locals }) => {
     const allTags = getAllTags();
 
     const allCovers = getAllCovers().filter(
-        (cover) => cover.coverUrl !== 'default.jpg'
+        (cover) => cover.coverUrl !== 'default'
     );
 
     return {
@@ -137,7 +137,7 @@ export const actions: Actions = {
         }
 
         // SPLASHART PROCESSING
-        let validatedCoverUrl = "";
+        let validatedCoverUrl = "default";
 
         if (coverUrl.toLowerCase().trim() !== "new" && coverUrl.toLowerCase().trim() !== "default") {
             // Check that the cover filename is not already in use
@@ -146,9 +146,7 @@ export const actions: Actions = {
                 return failWithForm(400, "The cover art selected does not exist.");
             }
             validatedCoverUrl = coverUrl;
-        } else if (coverUrl.toLocaleLowerCase() === "default") {
-            validatedCoverUrl = "default.jpg";
-        } else {
+        } else if (coverUrl.toLowerCase().trim() === "new") {
             // Creating a new cover
             try {
                 if (coverFile && coverFile instanceof File && coverFile.size > 0) {

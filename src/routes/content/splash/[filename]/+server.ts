@@ -1,8 +1,9 @@
 import { error } from '@sveltejs/kit';
 import { readFile } from 'node:fs/promises';
-import { join } from 'node:path';
+import { extname, join } from 'node:path';
 import { getCoversDir } from '$lib/assets';
 import defaultSplashArt from '$lib/assets/default_splashart.jpg?inline';
+import { env } from '$env/dynamic/private';
 
 const mimeTypes: Record<string, string> = {
     avif: 'image/avif',
@@ -18,12 +19,27 @@ export const GET = async ({ params }) => {
 
     if (!filename) {
         throw error(400, 'Missing splash art filename.');
-    } else if (filename === "default.jpg") {
-        const file = Buffer.from(defaultSplashArt.split(',')[1], 'base64');
+    } else if (filename === "default") {
+        let file: Buffer;
+        let contentType = 'image/jpeg';
 
-        return new Response(file, {
+        if (env.DEFAULT_SPLASHART) {
+            const extension = extname(env.DEFAULT_SPLASHART).slice(1).toLowerCase();
+            contentType = mimeTypes[extension];
+
+            if (!contentType) {
+                console.warn('Unsupported default splash art format. Using app default.')
+                file = Buffer.from(defaultSplashArt.split(',')[1], 'base64');
+            } else {
+                file = await readFile(env.DEFAULT_SPLASHART);
+            }
+        } else {
+            file = Buffer.from(defaultSplashArt.split(',')[1], 'base64');
+        }
+
+        return new Response(new Uint8Array(file), {
             headers: {
-                'Content-Type': 'image/jpeg',
+                'Content-Type': contentType,
                 'Cache-Control': 'public, max-age=31536000, immutable',
             },
         });

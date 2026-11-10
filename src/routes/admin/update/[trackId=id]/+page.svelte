@@ -22,7 +22,7 @@
         'w-full rounded-lg border border-gray-700 bg-gray-800/80 px-4 py-3 text-sm text-white placeholder:text-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30';
 
     const track = $derived(data.track);
-    let coverSelection = $derived(track.coverUrl === "default.jpg" ? "default" : track.coverUrl );
+    let coverSelection = $derived(track.coverUrl);
 
     onMount(() => {
         const instances: Array<{ destroy: () => void }> = [];
@@ -242,9 +242,7 @@
                             class="md:col-span-2 overflow-hidden rounded-xl border border-gray-700 bg-gray-800/70"
                         >
                             <img
-                                src="/content/splash/{coverSelection === 'default'
-                                    ? 'default.jpg'
-                                    : coverSelection}"
+                                src="/content/splash/{coverSelection}"
                                 alt="Selected cover preview"
                                 class="max-h-80 w-full object-contain"
                             />
