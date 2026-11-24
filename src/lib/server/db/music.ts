@@ -516,3 +516,22 @@ export const createTrack = async (input: {
         return trackId;
     });
 };
+
+export const deleteCoverFromTracks = async (filename: string) => {
+    return db.update(music)
+        .set({
+            coverUrl: 'default'
+        })
+        .where(eq(music.coverUrl, filename))
+        .run();
+}
+
+export const getTracksByCoverUrl = async (coverUrl: string) => {
+    return db.query.music.findMany({
+        where: {
+            coverUrl: {
+                eq: coverUrl
+            }
+        }
+    });
+}

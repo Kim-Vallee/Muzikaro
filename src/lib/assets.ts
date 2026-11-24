@@ -1,5 +1,6 @@
 import path from 'node:path';
 import { AUDIO_DIR, COVERS_DIR } from "$env/static/private";
+import { unlink } from 'node:fs/promises';
 
 export const getAudioDir = (): string => {
     const audioDir = AUDIO_DIR;
@@ -24,3 +25,11 @@ export const getAudioPath = (filename: string): string =>
 
 export const getCoverPath = (filename: string): string =>
     path.join(getCoversDir(), filename);
+
+export const deleteCoverFile = async (filename: string): Promise<void> => {
+    if (!filename || path.basename(filename) !== filename) {
+        throw new Error('Invalid cover filename');
+    }
+
+    await unlink(getCoverPath(filename));
+}

@@ -1,44 +1,40 @@
-import { error, redirect } from "@sveltejs/kit";
+import { error, fail } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
-import {
-    createDebugSession,
-    DEBUG_SESSION_MAX_AGE,
-    DEBUG_SESSION_COOKIE,
-    isDebugAuthEnabled
-} from "$lib/server/debug-auth";
+import { deleteCoverFromTracks, getAllCovers } from "$lib/server/db/music";
+import { deleteCoverFile, getCoversDir } from "$lib/assets";
 
 export const load: PageServerLoad = ({ locals }) => {
     if (!locals.user) {
         throw error(403, 'You do not have access to this page.');
     }
 
+    const allCovers = getAllCovers();
+
     return {
         debugMode: locals.debugMode ?? false,
-        debugAuthenticated: locals.debugAuthenticated ?? false
+        debugAuthenticated: locals.debugAuthenticated ?? false,
+        allCovers: allCovers,
     }
 };
 
 export const actions: Actions = {
-    debugLogin: async ({ cookies, url }) => {
-        if (!isDebugAuthEnabled) {
-            throw error(404, "Debug login is disabled.");
+    deleteSplashart: async ({ locals, request }) => {
+        if (!locals.user) {
+            throw error(403, 'You must be authenticated to delete a splash art cover.');
         }
 
-        cookies.set(DEBUG_SESSION_COOKIE, createDebugSession(), {
-            httpOnly: true,
-            secure: url.protocol === "https:",
-            sameSite: "strict",
-            path: "/",
-            maxAge: DEBUG_SESSION_MAX_AGE
-        });
-        throw redirect(303, "/admin");
-    },
-    debugLogout: async ({ cookies }) => {
-        if (!isDebugAuthEnabled) {
-            throw error(404, "Debug login is disabled.");
-        }
+        const formData = await request.formData();
+        const coverUrl = String(formData.get('splashart') ?? '').trim();
 
-        cookies.delete(DEBUG_SESSION_COOKIE, { path: "/" });
-        throw redirect(303, "/admin");
+        // Delete cover from db
+        const coversUpdated = await deleteCoverFromTracks(coverUrl);
+
+        // Delete cover file;
+        try {
+            await deleteCoverFile(coverUrl);
+            return { success: true, message: 'Cover ' + coverUrl + ' deleted successfully (' + coversUpdated.changes + ' changed)' };
+        } catch (cause) {
+            return { error: true, message: 'Could not delete the splash art file ' + coverUrl + ' (' + coversUpdated.changes + ' changes in the database).', errorMessage: cause };
+        }
     }
 };

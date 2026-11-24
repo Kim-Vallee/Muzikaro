@@ -1,11 +1,12 @@
 import { error, fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import { getAllAuthors, getAllStyles, getAllTags, getTrackById, updateTrackById, getAllCovers } from '$lib/server/db/music';
+import { getAllAuthors, getAllStyles, getAllTags, getTrackById, updateTrackById, getAllCovers, getTracksByCoverUrl } from '$lib/server/db/music';
 import { mkdir, writeFile, rm } from 'node:fs/promises';
 import { join } from 'node:path';
-import { getAudioDir, getAudioPath, getCoversDir } from '$lib/assets';
+import { deleteCoverFile, getAudioDir, getAudioPath, getCoversDir } from '$lib/assets';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
+import { except } from 'drizzle-orm/sqlite-core';
 
 export const load: PageServerLoad = async ({ locals, params }) => {
     const isAuthenticated = Boolean(locals.user);
@@ -49,6 +50,8 @@ export const actions: Actions = {
         if (!existingTrack) {
             return fail(404, { error: 'Track not found.' });
         }
+
+        const previousCover = existingTrack.coverUrl;
 
         const formData = await request.formData();
         const title = String(formData.get('title') ?? '').trim();
@@ -157,10 +160,12 @@ export const actions: Actions = {
         // SPLASHART PROCESSING
         let validatedCoverUrl = "default";
 
+        const allCoversBeforeUpdate = getAllCovers();
+
+
         if (coverUrl.toLowerCase().trim() !== "new" && coverUrl.toLowerCase().trim() !== "default") {
-            // Check that the cover filename is not already in use
-            const existingCoverURL = getAllCovers();
-            if (existingCoverURL.filter((cover) => cover.coverUrl === coverUrl).length == 0) {
+            const coverExists = allCoversBeforeUpdate.some((cover) => cover.coverUrl === coverUrl);
+            if (coverUrl !== previousCover && !coverExists) {
                 return failWithForm(400, "The cover art selected does not exist.");
             }
             validatedCoverUrl = coverUrl;
@@ -193,7 +198,6 @@ export const actions: Actions = {
             }
         }
 
-
         try {
             await updateTrackById(trackId, {
                 title,
@@ -215,11 +219,23 @@ export const actions: Actions = {
             });
 
 
-            return { success: true, message: 'Track updated successfully.' };
         } catch (err) {
             console.log(err);
 
             return failWithForm(500, 'Unable to update the track right now.');
         }
+
+        const allTracksWithPreviousCover = await getTracksByCoverUrl(previousCover);
+        try {
+            if (previousCover !== "default" && allTracksWithPreviousCover.length === 0) {
+                await deleteCoverFile(previousCover);
+                return { success: true, message: 'Track updated successfully. (deleted cover)' };
+            }
+            return { success: true, message: 'Track updated successfully.' };
+        } catch (err) {
+            return { error: 'Track updated but could not delete cover file: ' + err };
+        }
+
+
     },
 };
