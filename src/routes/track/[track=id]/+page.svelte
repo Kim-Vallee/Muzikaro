@@ -7,6 +7,7 @@
 
     let wavesurfer: WaveSurfer;
     let isPlaying: boolean = $state(false);
+    let coverDialog: HTMLDialogElement;
 
     function formatDate(date: Date) {
         return date.toLocaleDateString(undefined, {
@@ -45,14 +46,34 @@
         if (wavesurfer.isPlaying()) isPlaying = true;
         else isPlaying = false;
     }
+
+    function openCoverDialog() {
+        coverDialog?.showModal();
+    }
+
+    function closeCoverDialog() {
+        coverDialog?.close();
+    }
 </script>
 
 <div class="min-h-screen flex flex-col bg-gray-950">
-    <main class="w-full px-6 py-12 flex-1 flex flex-col">
+    <main
+        class="relative isolate w-full px-4 py-6 sm:px-6 sm:py-12 flex-1 flex flex-col"
+    >
         <div
-            class="flex-1 flex bg-gray-800 rounded-3xl border border-gray-700 shadow-xl overflow-hidden"
+            class="relative z-10 flex-1 flex rounded-3xl border border-gray-700 bg-gray-900/75 shadow-xl backdrop-blur-md overflow-hidden"
         >
-            <div class="flex flex-col flex-1 p-8">
+            <img
+                src="/content/splash/{data.track.coverUrl}"
+                alt=""
+                aria-hidden="true"
+                class="pointer-events-none absolute inset-0 z-0 h-full w-full object-cover"
+            />
+            <div
+                aria-hidden="true"
+                class="pointer-events-none absolute inset-0 z-0 bg-gray-950/75 backdrop-blur-sm"
+            ></div>
+            <div class="flex flex-col flex-1 p-8 z-10">
                 <a
                     href="/"
                     class="text-sm text-blue-300 hover:text-white transition-colors"
@@ -66,7 +87,7 @@
 
                 <div class="mt-4">
                     <div
-                        class="md:absolute md:left-1/2 md:transform md:-translate-x-1/2"
+                        class="md:absolute md:left-1/2 md:transform md:-translate-x-1/2 text-center"
                     >
                         <button
                             type="button"
@@ -108,16 +129,41 @@
                         </button>
                     </div>
                     <div
-                        class="flex flex-col gap-2 md:gap-6 md:flex-row md:items-start md:justify-between"
+                        class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between"
                     >
-                        <div class="min-w-0 order-1">
+                        <div class="order-1 min-w-0">
                             <h2 class="text-2xl font-bold text-white truncate">
                                 {data.track.title}
                             </h2>
                             <p class="text-sm text-gray-400 mt-2">
-                                by {data.track.authors.map((author) => author.name).join(', ')}
+                                by {data.track.authors
+                                    .map((author) => author.name)
+                                    .join(", ")}
                             </p>
                         </div>
+                        <button
+                            type="button"
+                            onclick={openCoverDialog}
+                            class="order-2 inline-flex shrink-0 self-start items-center gap-2 rounded-lg border border-gray-600 bg-gray-950/70 px-4 py-2 text-sm font-medium text-white transition hover:border-blue-500 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                            <svg
+                                aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.5"
+                                class="h-5 w-5"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M2.25 12s3.5-6.75 9.75-6.75S21.75 12 21.75 12 18.25 18.75 12 18.75 2.25 12 2.25 12Z"
+                                />
+                                <circle cx="12" cy="12" r="2.25" />
+                            </svg>
+                            View splash art
+                        </button>
                     </div>
                 </div>
 
@@ -147,7 +193,9 @@
                                 <div class="">BPM: {data.track.bpm}</div>
                                 <div class="mt-2">
                                     Duration:
-                                    {Math.floor(data.track.duration / 60)}:{Math.round(data.track.duration % 60)}
+                                    {Math.floor(
+                                        data.track.duration / 60,
+                                    )}:{Math.round(data.track.duration % 60)}
                                 </div>
                                 <div class="mt-2">
                                     Upload date: {formatDate(
@@ -193,4 +241,40 @@
             </div>
         </div>
     </main>
+
+    <dialog
+        bind:this={coverDialog}
+        aria-label="Splash art for {data.track.title}"
+        onclick={(event) => {
+            if (event.target === coverDialog) closeCoverDialog();
+        }}
+        class="m-auto max-h-[95vh] max-w-[95vw] overflow-visible border-0 bg-transparent p-0 backdrop:bg-black/85"
+    >
+        <button
+            type="button"
+            onclick={closeCoverDialog}
+            aria-label="Close splash art"
+            class="absolute -right-3 -top-3 z-10 rounded-full bg-gray-900/90 p-2 text-white shadow-lg hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                class="h-6 w-6"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M6 18 18 6M6 6l12 12"
+                />
+            </svg>
+        </button>
+        <img
+            src="/content/splash/{data.track.coverUrl}"
+            alt="Splash art of {data.track.title}"
+            class="max-h-[95vh] max-w-[95vw] object-contain"
+        />
+    </dialog>
 </div>

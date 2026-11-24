@@ -1,0 +1,442 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "id": "e3974c58-0b41-4f46-8c23-92440640de47",
+  "prevIds": [
+    "9519856b-8a12-4a03-a856-7c430329c0da"
+  ],
+  "ddl": [
+    {
+      "name": "authors",
+      "entityType": "tables"
+    },
+    {
+      "name": "music",
+      "entityType": "tables"
+    },
+    {
+      "name": "music_authors",
+      "entityType": "tables"
+    },
+    {
+      "name": "music_styles",
+      "entityType": "tables"
+    },
+    {
+      "name": "music_tags",
+      "entityType": "tables"
+    },
+    {
+      "name": "styles",
+      "entityType": "tables"
+    },
+    {
+      "name": "tags",
+      "entityType": "tables"
+    },
+    {
+      "type": "integer",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "id",
+      "entityType": "columns",
+      "table": "authors"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "name",
+      "entityType": "columns",
+      "table": "authors"
+    },
+    {
+      "type": "integer",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "id",
+      "entityType": "columns",
+      "table": "music"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "title",
+      "entityType": "columns",
+      "table": "music"
+    },
+    {
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "description",
+      "entityType": "columns",
+      "table": "music"
+    },
+    {
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "uploaded_at",
+      "entityType": "columns",
+      "table": "music"
+    },
+    {
+      "type": "integer",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "bpm",
+      "entityType": "columns",
+      "table": "music"
+    },
+    {
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": "false",
+      "generated": null,
+      "name": "hidden",
+      "entityType": "columns",
+      "table": "music"
+    },
+    {
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "setup",
+      "entityType": "columns",
+      "table": "music"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "audio_file",
+      "entityType": "columns",
+      "table": "music"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": "'/content/splash/default.png'",
+      "generated": null,
+      "name": "cover_url",
+      "entityType": "columns",
+      "table": "music"
+    },
+    {
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": "0",
+      "generated": null,
+      "name": "duration",
+      "entityType": "columns",
+      "table": "music"
+    },
+    {
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "music_id",
+      "entityType": "columns",
+      "table": "music_authors"
+    },
+    {
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "author_id",
+      "entityType": "columns",
+      "table": "music_authors"
+    },
+    {
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "music_id",
+      "entityType": "columns",
+      "table": "music_styles"
+    },
+    {
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "style_id",
+      "entityType": "columns",
+      "table": "music_styles"
+    },
+    {
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "music_id",
+      "entityType": "columns",
+      "table": "music_tags"
+    },
+    {
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "tag_id",
+      "entityType": "columns",
+      "table": "music_tags"
+    },
+    {
+      "type": "integer",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "id",
+      "entityType": "columns",
+      "table": "styles"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "name",
+      "entityType": "columns",
+      "table": "styles"
+    },
+    {
+      "type": "integer",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "id",
+      "entityType": "columns",
+      "table": "tags"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "name",
+      "entityType": "columns",
+      "table": "tags"
+    },
+    {
+      "columns": [
+        "music_id"
+      ],
+      "tableTo": "music",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "nameExplicit": false,
+      "name": "fk_music_authors_music_id_music_id_fk",
+      "entityType": "fks",
+      "table": "music_authors"
+    },
+    {
+      "columns": [
+        "author_id"
+      ],
+      "tableTo": "authors",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "nameExplicit": false,
+      "name": "fk_music_authors_author_id_authors_id_fk",
+      "entityType": "fks",
+      "table": "music_authors"
+    },
+    {
+      "columns": [
+        "music_id"
+      ],
+      "tableTo": "music",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "nameExplicit": false,
+      "name": "fk_music_styles_music_id_music_id_fk",
+      "entityType": "fks",
+      "table": "music_styles"
+    },
+    {
+      "columns": [
+        "style_id"
+      ],
+      "tableTo": "styles",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "nameExplicit": false,
+      "name": "fk_music_styles_style_id_styles_id_fk",
+      "entityType": "fks",
+      "table": "music_styles"
+    },
+    {
+      "columns": [
+        "music_id"
+      ],
+      "tableTo": "music",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "nameExplicit": false,
+      "name": "fk_music_tags_music_id_music_id_fk",
+      "entityType": "fks",
+      "table": "music_tags"
+    },
+    {
+      "columns": [
+        "tag_id"
+      ],
+      "tableTo": "tags",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "nameExplicit": false,
+      "name": "fk_music_tags_tag_id_tags_id_fk",
+      "entityType": "fks",
+      "table": "music_tags"
+    },
+    {
+      "columns": [
+        "music_id",
+        "author_id"
+      ],
+      "nameExplicit": false,
+      "name": "music_authors_pk",
+      "entityType": "pks",
+      "table": "music_authors"
+    },
+    {
+      "columns": [
+        "music_id",
+        "style_id"
+      ],
+      "nameExplicit": false,
+      "name": "music_styles_pk",
+      "entityType": "pks",
+      "table": "music_styles"
+    },
+    {
+      "columns": [
+        "music_id",
+        "tag_id"
+      ],
+      "nameExplicit": false,
+      "name": "music_tags_pk",
+      "entityType": "pks",
+      "table": "music_tags"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "authors_pk",
+      "table": "authors",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "music_pk",
+      "table": "music",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "styles_pk",
+      "table": "styles",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "tags_pk",
+      "table": "tags",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "name"
+      ],
+      "nameExplicit": false,
+      "name": "authors_name_unique",
+      "entityType": "uniques",
+      "table": "authors"
+    },
+    {
+      "columns": [
+        "name"
+      ],
+      "nameExplicit": false,
+      "name": "styles_name_unique",
+      "entityType": "uniques",
+      "table": "styles"
+    },
+    {
+      "columns": [
+        "name"
+      ],
+      "nameExplicit": false,
+      "name": "tags_name_unique",
+      "entityType": "uniques",
+      "table": "tags"
+    }
+  ],
+  "renames": []
+}
