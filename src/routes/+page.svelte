@@ -266,13 +266,15 @@
                     id="track-id-{track.id}"
                 >
                     <div class="relative items-stretch md:flex md:flex-row">
-                        <div class="absolute md:flex md:basis-1/5 md:items-center md:justify-center md:overflow-hidden md:relative">
+                        <div
+                            class="absolute md:flex md:basis-1/5 md:items-center md:justify-center md:overflow-hidden md:relative"
+                        >
                             <!-- <img src="/content/splash/{track.coverUrl}" alt="Splash art of {track.title}"> -->
-                            <img 
+                            <img
                                 src="/content/splash/{track.coverUrl}"
                                 alt="Splash art of {track.title}"
                                 class="h-full object-cover opacity-30 relative md:h-full md:w-full md:opacity-100"
-                            >
+                            />
                         </div>
 
                         <div class="md:basis-4/5 relative min-w-0 min-h-0 z-10">
@@ -608,6 +610,14 @@
                     </div>
                 </div>
             {/if}
+        </div>
+        <div class="mt-6 flex justify-center">
+            <a
+                href="/admin"
+                class="inline-flex items-center justify-center rounded-lg border border-gray-700 bg-gray-800 px-4 py-2 text-sm font-medium text-gray-300 transition-colors hover:bg-gray-700 hover:text-white"
+            >
+                Admin panel
+            </a>
         </div>
     </div>
 
