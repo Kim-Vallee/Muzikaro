@@ -1,7 +1,10 @@
 <script lang="ts">
 	import favicon from '$lib/assets/favicon.svg';
 
-	let { children } = $props();
+	let { data, children } = $props();
+
+	let isAuthenticated = $derived(data.isAuthenticated);
+
 	import "@yaireo/tagify/dist/tagify.css";
 	import "../app.css";
 </script>

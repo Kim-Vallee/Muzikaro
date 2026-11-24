@@ -66,7 +66,6 @@ export const load: PageServerLoad = async ({ locals, url }) => {
         totalTracks: total,
         allTags: allTags,
         allStyles: allStyles,
-        isAuthenticated: isAuthenticated,
     };
 };
 

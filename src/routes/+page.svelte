@@ -342,13 +342,17 @@
                                         </div>
                                         <div class="flex items-center gap-2">
                                             <span>Styles</span>
-                                            {#each track.styles as style}
-                                                <span
-                                                    class="text-[11px] px-2 py-1 bg-purple-900/50 text-purple-300 rounded-full border border-purple-700/50"
-                                                >
-                                                    {style.name}
-                                                </span>
-                                            {/each}
+                                            {#if track.styles.length > 0}
+                                                {#each track.styles as style}
+                                                    <span
+                                                        class="text-[11px] px-2 py-1 bg-purple-900/50 text-purple-300 rounded-full border border-purple-700/50"
+                                                    >
+                                                        {style.name}
+                                                    </span>
+                                                {/each}
+                                            {:else}
+                                                <span class="text-gray-200">N/A</span>
+                                            {/if}
                                         </div>
                                         <div class="flex items-center gap-2">
                                             <span>BPM</span>
