@@ -1,1 +1,1 @@
-ALTER TABLE `music` ADD `cover_url` text DEFAULT '/content/splash/default.png' NOT NULL;
+ALTER TABLE `music` ADD `cover_url` text DEFAULT 'default' NOT NULL;
