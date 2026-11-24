@@ -19,7 +19,7 @@
                     href="/admin/splasharts"
                 >
                     Manage splash arts
-            </a>
+                </a>
                 <form method="POST" action="?/debugLogout" class="w-full">
                     <button
                         class="inline-flex w-full items-center justify-center rounded-lg border border-slate-200 bg-red-900 px-4 py-3 font-semibold text-white transition hover:bg-red-800"
@@ -27,6 +27,12 @@
                         Sign Out
                     </button>
                 </form>
+                <a
+                    class="button inline-flex w-full items-center justify-center rounded-lg border border-slate-200 bg-slate-900 px-4 py-3 font-semibold text-white transition hover:bg-slate-800"
+                    href="/"
+                >
+                    Back to home
+            </a>
             </div>
         {:else}
             <div
@@ -42,6 +48,13 @@
                         Log In
                     </button>
                 </form>
+
+                <a
+                    class="button inline-flex w-full items-center justify-center rounded-lg border border-slate-200 bg-slate-900 px-4 py-3 font-semibold text-white transition hover:bg-slate-800"
+                    href="/"
+                >
+                    Back to home
+            </a>
             </div>
         {/if}
     {:else if $session.data}
@@ -59,6 +72,12 @@
             >
                 Sign Out
             </button>
+                <a
+                    class="button inline-flex w-full items-center justify-center rounded-lg border border-slate-200 bg-slate-900 px-4 py-3 font-semibold text-white transition hover:bg-slate-800"
+                    href="/"
+                >
+                    Back to home
+            </a>
         </div>
     {:else}
         <div
@@ -85,6 +104,12 @@
                 </svg>
                 Continue with GitHub
             </button>
+                <a
+                    class="button inline-flex w-full items-center justify-center rounded-lg border border-slate-200 bg-slate-900 px-4 py-3 font-semibold text-white transition hover:bg-slate-800"
+                    href="/"
+                >
+                    Back to home
+            </a>
         </div>
     {/if}
 </div>

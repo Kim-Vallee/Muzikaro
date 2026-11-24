@@ -36,6 +36,7 @@ This website is a lightweight self-hosted alternative to soundcloud and serves a
   * Setup
   * Description
   * Tags
+  * Splash art covers
 * A waveform interface provided by waveform.js
 * Search and filtering by title, author, tag and music style
 * A tagging system
@@ -54,7 +55,7 @@ This website is a lightweight self-hosted alternative to soundcloud and serves a
 
 ### Requirements
 
-The app requires NodeJS, pnpm and ffprobe:
+The app requires Node.js 24 or later, pnpm and ffprobe:
 
 - [NodeJS](https://nodejs.org/en/download)
 - [pnpm](https://pnpm.io/installation)
@@ -62,16 +63,31 @@ The app requires NodeJS, pnpm and ffprobe:
 
 ### Setup
 
-In order to install and run the project and set up a [GitHub app](https://docs.github.com/en/apps/creating-github-apps/about-creating-github-apps/about-creating-github-apps):
+First, create a [GitHub OAuth app](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app). Set its callback URL to `http://localhost:5173/api/auth/callback/github` for local development, or `<BETTER_AUTH_URL>/api/auth/callback/github` in production.
+
+Clone the project and install its dependencies:
 
 ```bash
 git clone https://github.com/Kim-Vallee/Muzikaro.git
 cd Muzikaro
 pnpm install
+```
+
+Copy `.env.example` to `.env` and fill in the required values (see [Environment variables](#environment-variables)):
+
+```bash
 cp .env.example .env
 ```
 
-Configure the `.env` file accordingly (see [Environment variables](#environment-variables)) and:
+Make sure `ffprobe` is available on your `PATH` and that the audio and cover directories exist and are writable.
+
+Apply the database migrations:
+
+```bash
+pnpm run db:migrate
+```
+
+Start the development server:
 
 ```bash
 pnpm run dev
@@ -81,7 +97,7 @@ pnpm run dev
 
 | Variable | Description | Required |
 |---|---|---|
-| `DEBUG` | Whether to use debug mode. When set to yes, authentification does not go through GitHub and is fully local. | Yes |
+| `DEBUG` | Whether to use debug mode. When set to yes, authentification does not go through GitHub and is fully local.<br> THIS MEANS ANYONE CAN MESS WITH YOU WEBSITE, DO NOT USE IN PRODUCTION.  | Yes |
 | `BETTER_AUTH_SECRET` | Secret used by Better Auth | Yes |
 | `BETTER_AUTH_URL` | Public URL of the application used for the GitHub app | Yes |
 | `DATABASE_URL` | URL of the database (e.g. `database.db`) | Yes |
@@ -129,18 +145,24 @@ pnpm run test
 
 ### Deploy
 
-The standard procedure to deploy uses [adapter-node](https://svelte.dev/docs/kit/adapter-node).
+The app uses [adapter-node](https://svelte.dev/docs/kit/adapter-node). On the production server, install Node.js 24 or later, pnpm and ffprobe. Configure the production values in `.env` before building, and make sure the audio and cover directories exist and are writable.
+
+From the project directory, install dependencies, apply database migrations and build the app:
 
 ```bash
-pnpm run build # Generates a build folder
+pnpm install --frozen-lockfile
+pnpm run db:migrate
+pnpm run build
 cp package.json pnpm-lock.yaml build/
 cd build/
 pnpm ci --prod
-cd ../
+cd ..
 node --env-file=.env build
 ```
 
-If you want to make it a socket, refer to [this doc](https://svelte.dev/docs/kit/adapter-node#Socket-activation).
+Keep `.env` in the project directory when starting the server. Set `PRODUCTION_HOST` and `PRODUCTION_PORT` to configure the listening address and port.
+
+To run the server with socket activation, see the [adapter-node socket activation guide](https://svelte.dev/docs/kit/adapter-node#Socket-activation).
 
 ## License
 
