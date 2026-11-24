@@ -176,7 +176,7 @@
                         >
                             Description
                         </h3>
-                        <p class="mt-3 text-sm leading-6 text-gray-300 mb-5">
+                        <p class="mt-3 text-sm leading-6 text-gray-300 mb-5 whitespace-pre-line">
                             {data.track.description}
                         </p>
                     </div>
@@ -232,7 +232,7 @@
                             >
                                 Setup
                             </h3>
-                            <p class="mt-3 text-sm leading-6 text-gray-300">
+                            <p class="mt-3 text-sm leading-6 text-gray-300 whitespace-pre-line">
                                 {data.track.setup}
                             </p>
                         </div>
