@@ -446,6 +446,7 @@
                                         <form
                                             action="?/hide_track"
                                             method="POST"
+                                            use:enhance
                                         >
                                             <input
                                                 type="hidden"

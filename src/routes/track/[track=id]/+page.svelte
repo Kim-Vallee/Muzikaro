@@ -168,7 +168,11 @@
                                 </svg>
                             </button>
 
-                            <form action="?/hide_track" method="POST">
+                            <form
+                                action="/?/hide_track"
+                                method="POST"
+                                use:enhance
+                            >
                                 <input
                                     type="hidden"
                                     value={data.track.id}
@@ -426,8 +430,7 @@
                 <h2 class="text-xl font-semibold text-white">Delete track?</h2>
                 <p class="mt-3 text-sm text-gray-400">
                     Are you sure you want to delete <span
-                        class="font-medium text-white"
-                        >{data.track.title}</span
+                        class="font-medium text-white">{data.track.title}</span
                     >?
                 </p>
                 <div class="mt-6 flex justify-end gap-3">
@@ -470,5 +473,4 @@
             </div>
         </div>
     {/if}
-
 </div>
